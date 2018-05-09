@@ -104,7 +104,7 @@ There are two means of launching your `factomd` instance:
 
 ### From the Docker CLI
 
-Run this command _exactly_: `docker run -d -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.0.0-alpine /go/bin/factomd -startdelay=600 -config=/root/.factom/private/factomd.conf
+Run this command _exactly_: `docker run -d --name "factomd" -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.0.0-alpine /go/bin/factomd -startdelay=600 -config=/root/.factom/private/factomd.conf
 `
 
 ### From the Portainer UI
@@ -113,23 +113,23 @@ Once you have logged into the [control panel](https://federation.factomd.com), p
 
 Then, click `containers > add container`.
 
-**Instructions marked with :heavy_exclamation_mark: _must_ be followed exactly or you risk being booted from the authority set.**
+**:heavy_exclamation_mark: These instructions must be followed exactly, otherwise you risk being kicked from the authority set. :heavy_exclamation_mark:**
 
-1. Name your container as you see fit
+1. Name your container `factomd`.
 
-:heavy_exclamation_mark: 2. Enter the image name `factominc/factomd:v5.0.0-alpine`
+2. Enter the image name `factominc/factomd:v5.0.0-alpine`
 
-:heavy_exclamation_mark: 3. Mark additional ports `8088:8088`, `8009`:`8009`, `8090:8090`.
+3. Mark additional ports `8088:8088`, `8009`:`8009`, `8090:8090`.
 
-:heavy_exclamation_mark: 4. Do _not_ modify access control.
+4. Do _not_ modify access control.
 
-:heavy_exclamation_mark: 5. Either this command for the command: `/go/bin/factomd -startdelay=600 -config=/root/.factom/private/factomd.conf`
+5. Either this command for the command: `/go/bin/factomd -startdelay=600 -config=/root/.factom/private/factomd.conf`
 
-:heavy_exclamation_mark: 6. Click "volumes", and map `/root/.factom/m2` to `factom_database`, and `/root/.factom/private` to `factom_keys`.
+6. Click "volumes", and map `/root/.factom/m2` to `factom_database`, and `/root/.factom/private` to `factom_keys`.
 
-:heavy_exclamation_mark: 7. Click "labels" and add a label `name:name` = `value:factomd`
+7. Click "labels" and add a label `name:name` = `value:factomd`
 
-:heavy_exclamation_mark: 8. Click "deploy the container"
+8. Click "deploy the container"
 
 9. You are done!
 

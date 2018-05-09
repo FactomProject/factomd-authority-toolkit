@@ -49,7 +49,7 @@ If you already have a synced node and would like to avoid resyncing, run:
 
 In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/factom_keys/_data`.
 
-Then, you must open the Docker Engine port and secure it using the TLS certificate we have distributed.
+## Exposing the Docker Engine
 
 ### Using `systemd`
 
@@ -94,7 +94,7 @@ Once you have joined the network, you will be issued a control panel login by a 
 
 **Only accept logins at federation.factomd.com. Any other login endpoints are fraudulent and not to be trusted.**
 
-## Joining the network
+## Starting FactomD Container
 
 There are two means of launching your `factomd` instance:
 

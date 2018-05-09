@@ -104,7 +104,8 @@ There are two means of launching your `factomd` instance:
 
 ### From the Docker CLI
 
-Run this command _exactly_: `docker run -d -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.0.0-alpine`
+Run this command _exactly_: `docker run -d -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.0.0-alpine /go/bin/factomd -startdelay=600 -config=/root/.factom/private/factomd.conf
+`
 
 ### From the Portainer UI
 
@@ -122,7 +123,7 @@ Then, click `containers > add container`.
 
 :heavy_exclamation_mark: 4. Do _not_ modify access control.
 
-5. Either leave the bootup command blank, or create or your own. Be careful!
+:heavy_exclamation_mark: 5. Either this command for the command: `/go/bin/factomd -startdelay=600 -config=/root/.factom/private/factomd.conf`
 
 :heavy_exclamation_mark: 6. Click "volumes", and map `/root/.factom/m2` to `factom_database`, and `/root/.factom/private` to `factom_keys`.
 

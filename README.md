@@ -19,7 +19,7 @@ Please follow the instructions [here](https://docs.docker.com/install/linux/dock
 Then, run `usermod -aG docker $USER` and logout/login.
 
 
-## How to join the Swarm
+## Configure Docker
 
 In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over a self-signed TLS certificate.
 

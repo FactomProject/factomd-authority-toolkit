@@ -51,7 +51,7 @@ In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/f
 
 ## Exposing the Docker Engine
 
-### Using `systemd`
+### On RedHat
 
 Open (using `sudo`) `/etc/sysconfig/docker` in your favorite text editor.
 
@@ -59,7 +59,7 @@ Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.p
 
 Then, `sudo service docker restart`.
 
-### Using `systemctl`
+### Using `systemd`
 
 Run `sudo systemctl edit docker.service`
 

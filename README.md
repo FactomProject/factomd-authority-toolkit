@@ -108,7 +108,7 @@ Run this command _exactly_: `docker run -d -v "factom_database:/root/.factom/m2"
 
 ### From the Portainer UI
 
-Once you have logged into the control panel, please ensure your node is selected in the top left dropdown menu.
+Once you have logged into the [control panel](https://federation.factomd.com), please ensure your node is selected in the top left dropdown menu.
 
 Then, click `containers > add container`.
 

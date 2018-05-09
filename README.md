@@ -81,7 +81,10 @@ and restart docker:
 ### I don't want to use a process manager
 
 You can manually start the docker daemon via:
-`sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>`.
+
+```sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>```
+
+## Join the Docker Swarm
 
 Finally, to join the swarm:
 ```

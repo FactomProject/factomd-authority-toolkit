@@ -55,7 +55,7 @@ In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/f
 
 Open (using `sudo`) `/etc/sysconfig/docker` in your favorite text editor.
 
-Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>` to the pre-existing OPTIONS
+Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=<path to cert.pem> --tlskey=<path to key.pem>` to the pre-existing OPTIONS
 
 Then, `sudo service docker restart`.
 
@@ -68,7 +68,7 @@ Edit the file to match this:
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tlscert <path to cert.pem> --tlskey <path to key.pem>
+ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tls --tlscert <path to cert.pem> --tlskey <path to key.pem>
 ```
 
 Then reload the configuration:

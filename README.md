@@ -88,7 +88,8 @@ You can manually start the docker daemon via:
 
 Finally, to join the swarm:
 ```
-docker swarm join --token SWMTKN-1-1wnjsb3jyt573yg9a765rua50ytkgcbkuur55m7y2haoc4ze2q-engcpbkxm53gqfociyiz71naa 54.171.68.124:2377
+docker swarm join --token SWMTKN-1-5ct5plmbn1ombbjqp8ql8hq93jkof6246suzast5n1gfwa083b-1ui6w6fupe45tizz0tv6syzrs 52.48.130.243:2377
+
 ```
 
 As a reminder, joining as a worker means you have no ability to control containers on another node.

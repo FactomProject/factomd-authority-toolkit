@@ -122,7 +122,7 @@ Once you have joined the network, you will be issued a control panel login by a 
 
 There are two means of launching your `factomd` instance:
 
-### From the Docker CLI
+### From the Docker CLI (recommended and better tested)
 
 Run this command _exactly_: `docker run -d --name "factomd" -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.0.0-alpine -startdelay=600 -config=/root/.factom/private/factomd.conf
 `

@@ -43,7 +43,7 @@ sudo service iptables save
 
 ## Choose one of the following 4
 
-### 1 Using `daemon.json` (recommended), works on all linux operating systems.
+### 1. Using `daemon.json` (recommended), works on all linux operating systems.
 
 You can configure the docker daemon using a default config file, located at `/etc/docker/daemon.json`. Create this file if it does not exist.
 
@@ -57,7 +57,7 @@ Example configuration:
 }
 ```
 
-### 2 On RedHat
+### 2. On RedHat
 
 Open (using `sudo`) `/etc/sysconfig/docker` in your favorite text editor.
 
@@ -65,7 +65,7 @@ Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=<path to 
 
 Then, `sudo service docker restart`.
 
-### 3 Using `systemd`
+### 3. Using `systemd`
 
 Run `sudo systemctl edit docker.service`
 
@@ -84,7 +84,7 @@ and restart docker:
 
 `sudo systemctl restart docker.service`
 
-### 4 I don't want to use a process manager
+### 4. I don't want to use a process manager
 
 You can manually start the docker daemon via:
 

@@ -119,7 +119,7 @@ Then, click `containers > add container`.
 
 2. Enter the image name `factominc/factomd:v5.0.0-alpine`
 
-3. Mark additional ports `8088:8088`, `8009`:`8009`, `8090:8090`.
+3. Mark additional ports `8088:8088`, `8108`:`8108`, `8090:8090`.
 
 4. Do _not_ modify access control.
 

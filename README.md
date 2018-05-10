@@ -25,16 +25,17 @@ In order to join the swarm, first ensure that your firewall rules allow access o
 
 - TCP port `2376` _only to_ `52.48.130.243` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts.
 
+In addition,  the following ports must be opened for factomd to function:
+- `2222` to `52.48.130.243`, which is the SSH port used by the `ssh` container
+- `8088` to `52.48.130.243`, the factomd API port
+- `8108` to the world, the factomd mainnet port
+
 An example using `iptables`:
 - `sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-
+- `sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2222 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
+- `sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 8088 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
+- `sudo iptables -A INPUT -p tcp --dport 8108 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
 - `sudo service iptables save`
-
-
-In addition,  the following ports must be opened for factomd to function:
-- `2222`, which is the SSH port used by the `ssh` container
-- `8108`, the factomd mainnet port
-- `8088`, the factomd API port
 
 # Exposing the Docker Engine
 

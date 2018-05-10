@@ -36,19 +36,6 @@ In addition,  the following ports must be opened for factomd to function:
 - `8108`, the factomd mainnet port
 - `8088`, the factomd API port
 
-Once these ports are open, create two volumes on your host machine:
-
-1. `docker volume create factom_database`
-2. `docker volume create factom_keys`
-
-These volumes will be used to store information by the `factomd` container.
-
-If you already have a synced node and would like to avoid resyncing, run:
-
-`sudo cp -r <path to your database> /var/lib/docker/volumes/factom_database/_data`.
-
-In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/factom_keys/_data`.
-
 ## Exposing the Docker Engine
 
 ### Using `daemon.json` (recommended)
@@ -97,6 +84,20 @@ and restart docker:
 You can manually start the docker daemon via:
 
 ```sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>```
+
+## Create the factomd volumes
+Factomd relies on two volumes,`factom_database` and `factom_keys`. Please create these before joining the swarm.
+
+1. `docker volume create factom_database`
+2. `docker volume create factom_keys`
+
+These volumes will be used to store information by the `factomd` container.
+
+If you already have a synced node and would like to avoid resyncing, run:
+
+`sudo cp -r <path to your database> /var/lib/docker/volumes/factom_database/_data`.
+
+In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/factom_keys/_data`.
 
 ## Join the Docker Swarm
 

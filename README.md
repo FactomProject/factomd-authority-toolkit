@@ -85,7 +85,7 @@ You can manually start the docker daemon via:
 
 ```sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>```
 
-# Create the factomd volumes
+# Create the FactomD volumes
 Factomd relies on two volumes,`factom_database` and `factom_keys`. Please create these before joining the swarm.
 
 1. `docker volume create factom_database`

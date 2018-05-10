@@ -12,6 +12,16 @@ It includes 4 containers:
   4. Metricbeat
   > Reports hardware metrics of all docker containers to our elasticsearch instance.
 
+## Table of Contents
+--
+
+1. [Install Docker](##Install docker)
+2. [Configure Docker](##Configure Docker)
+3. [Expose the Docker Engine](##Exposing the Docker Engine)
+4. [Create Volumes](##Create the factomd volumes)
+5. [Join the Docker Swarm](##Join the Docker Swarm)
+6. [Launch FactomD](##Starting FactomD Container)
+
 ## Install docker
 
 Please follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) to install docker-ce to your machine.

@@ -12,24 +12,14 @@ It includes 4 containers:
   4. Metricbeat
   > Reports hardware metrics of all docker containers to our elasticsearch instance.
 
-## Table of Contents
---
-
-1. [Install Docker](##Install docker)
-2. [Configure Docker](##Configure Docker)
-3. [Expose the Docker Engine](##Exposing the Docker Engine)
-4. [Create Volumes](##Create the factomd volumes)
-5. [Join the Docker Swarm](##Join the Docker Swarm)
-6. [Launch FactomD](##Starting FactomD Container)
-
-## Install docker
+# Install docker
 
 Please follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) to install docker-ce to your machine.
 
 Then, run `usermod -aG docker $USER` and logout/login.
 
 
-## Configure Docker
+# Configure Docker
 
 In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over a self-signed TLS certificate.
 
@@ -46,7 +36,7 @@ In addition,  the following ports must be opened for factomd to function:
 - `8108`, the factomd mainnet port
 - `8088`, the factomd API port
 
-## Exposing the Docker Engine
+# Exposing the Docker Engine
 
 ### Using `daemon.json` (recommended)
 
@@ -95,7 +85,7 @@ You can manually start the docker daemon via:
 
 ```sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>```
 
-## Create the factomd volumes
+# Create the factomd volumes
 Factomd relies on two volumes,`factom_database` and `factom_keys`. Please create these before joining the swarm.
 
 1. `docker volume create factom_database`
@@ -109,7 +99,7 @@ If you already have a synced node and would like to avoid resyncing, run:
 
 In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/factom_keys/_data`.
 
-## Join the Docker Swarm
+# Join the Docker Swarm
 
 Finally, to join the swarm:
 ```
@@ -123,7 +113,7 @@ Once you have joined the network, you will be issued a control panel login by a 
 
 **Only accept logins at federation.factomd.com. Any other login endpoints are fraudulent and not to be trusted.**
 
-## Starting FactomD Container
+# Starting FactomD Container
 
 There are two means of launching your `factomd` instance:
 

@@ -49,7 +49,7 @@ Example configuration:
 ```
 {
   "tls": true,
-  "tlscert": "/path/to/cert.pem"
+  "tlscert": "/path/to/cert.pem",
   "tlskey": "/path/to/key.pem",
   "hosts": ["tcp://0.0.0.0:2376", "unix:///var/run/docker.sock"]
 }

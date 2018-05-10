@@ -31,11 +31,13 @@ In addition,  the following ports must be opened for factomd to function:
 - `8108` to the world, the factomd mainnet port
 
 An example using `iptables`:
-- `sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-- `sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2222 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-- `sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 8088 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-- `sudo iptables -A INPUT -p tcp --dport 8108 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-- `sudo service iptables save`
+```
+sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2222 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 8088 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8108 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo service iptables save
+```
 
 # Exposing the Docker Engine
 

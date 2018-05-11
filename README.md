@@ -14,30 +14,34 @@ It includes 4 containers:
 
 # Install docker
 
-Please follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) to install docker-ce to your machine.
+Please follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) to install docker-ce to your machine. If you run Ubuntu 18.04 you can use the docker.io package `sudo apt-get install docker.io` as it's recent enough to support swam and iptables without modification.
 
 Then, run `usermod -aG docker $USER` and logout/login.
 
 
 # Configure Docker
 
-In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over a self-signed TLS certificate.
+In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over a self-signed TLS certificate. Due to the way iptables and docker work you cannot use the `INPUT chain to block access to apps running in a docker container as it's not a local destination but a `FORWARD` destination. By default when you map a port into a docker container it opens up to `any` host. To restrict access we need to add our rules in the `DOCKER-USER` chain.
 
-- TCP port `2376` _only to_ `52.48.130.243` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts.
+- TCP port `2376` _only to_ `52.48.130.243` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts. As this is a local service we use the `INPUT` chain.
 
-In addition,  the following ports must be opened for factomd to function:
+In addition,  the following ports must be opened for factomd to function which we add to the `DOCKER-USER`:
 - `2222` to `52.48.130.243`, which is the SSH port used by the `ssh` container
 - `8088` to `52.48.130.243`, the factomd API port
+- `8090` to `52.48.130.243`, the factomd Control panel
 - `8108` to the world, the factomd mainnet port
 
 An example using `iptables`:
 ```
 sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 2222 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-sudo iptables -A INPUT -p tcp -s 52.48.130.243 --dport 8088 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 8108 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-sudo service iptables save
+sudo iptables -A DOCKER-USER -s 52.48.130.243/32 -p tcp -m tcp --dport 8090 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A DOCKER-USER -s 52.48.130.243/32 -p tcp -m tcp --dport 2222 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A DOCKER-USER -s 52.48.130.243/32 -p tcp -m tcp --dport 8088 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A DOCKER-USER -p tcp -m tcp --dport 8108 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A DOCKER-USER -i <external if> -j DROP
 ```
+
+Don't forget to [save](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands#saving-rules) the rules!
 
 # Exposing the Docker Engine
 

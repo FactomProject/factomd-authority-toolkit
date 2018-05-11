@@ -14,7 +14,7 @@ It includes 4 containers:
 
 # Install docker
 
-Please follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) to install docker-ce to your machine. If you run Ubuntu 18.04 you can use the docker.io package `sudo apt-get install docker.io` as it's recent enough to support swam and iptables without modification.
+Please follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) to install docker-ce to your machine. If you run Ubuntu 18.04 you can use the docker.io package `sudo apt-get install docker.io` as it's recent enough to support swarm and iptables without modification.
 
 Then, run `usermod -aG docker $USER` and logout/login.
 

@@ -25,7 +25,7 @@ In order to join the swarm, first ensure that your firewall rules allow access o
 
 - TCP port `2376` _only to_ `52.48.130.243` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts. As this is a local service we use the `INPUT` chain.
 
-In addition,  the following ports must be opened for factomd to function which we add to the `DOCKER-USER`:
+In addition,  the following ports must be opened for factomd to function which we add to the `DOCKER-USER` chain:
 - `2222` to `52.48.130.243`, which is the SSH port used by the `ssh` container
 - `8088` to `52.48.130.243`, the factomd API port
 - `8090` to `52.48.130.243`, the factomd Control panel

@@ -106,6 +106,8 @@ If you already have a synced node and would like to avoid resyncing, run:
 
 `sudo cp -r <path to your database> /var/lib/docker/volumes/factom_database/_data`.
 
+The directory in `_data` after the copy should be `main-database`, as the volume is mounted at `$HOME/.factom/m2`.
+
 In addition, please place your `factomd.conf` file in `/var/lib/docker/volumes/factom_keys/_data`.
 
 # Join the Docker Swarm

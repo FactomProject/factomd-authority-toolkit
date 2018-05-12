@@ -120,7 +120,10 @@ docker swarm join --token SWMTKN-1-5ct5plmbn1ombbjqp8ql8hq93jkof6246suzast5n1gfw
 
 As a reminder, joining as a worker means you have no ability to control containers on another node.
 
-Once you have joined the network, you will be issued a control panel login by a Factom employee.
+Once you have joined the network, you will be issued a control panel login by a Factom employee after messaging one of the Factom engineers on discord. You should private message the following for **each** node:
+- NodeID (`docker info`)
+- IP Address
+- Docker engine listening port (`2376`)
 
 **Only accept logins at federation.factomd.com. Any other login endpoints are fraudulent and not to be trusted.**
 

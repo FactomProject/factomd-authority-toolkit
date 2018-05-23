@@ -7,9 +7,11 @@
             * [1. Checking DBHeight](#1-checking-dbheight)
             * [2. Check node is syncing minutes](#2-check-node-is-syncing-minutes)
             * [3. Check process list for s](#3-check-process-list-for-s)
-         * [1. Brain Swapping / Brain Transfering](#1-brain-swapping--brain-transfering)
+         * [1. Brain Swapping / Brain Transferring](#1-brain-swapping--brain-transferring)
             * [Process](#process)
             * [Technical Information](#technical-information)
+         * [2. Updating factomd docker container](#2-updating-factomd-docker-container)
+
 
 
 
@@ -65,7 +67,7 @@ The `7/7` means you are on minute 7. On a follower node it will appear as `_/7`.
 
 The Process list is located in the control panel (localhost:8090) -> `more detailed node information` -> `Process List`. Simply do a `ctrl+f` and search for `<nil>`. If any appear, your node might not be syncing well with the network.
 
-### 1. Brain Swapping / Brain Transfering
+### 1. Brain Swapping / Brain Transferring
 
 Brain swap/transfer is the simple idea of moving an identity from 1 node to another, such that the identity never appears to be offline from the perspective of the network. It is called a swap when both nodes switch with the other node's identity, and therefore 'swap' positions. It is a transfer when only 1 identity is involved.
 
@@ -134,5 +136,15 @@ When you reload the identity of a factomd (change the identity to something else
 
 If N<sub>A</sub> and N<sub>B</sub> are both the same identity, they will both try to perform as an authority, however the network does not allow 2 nodes to share an identity. Both N<sub>A</sub> and N<sub>B</sub> will detect that aswell, and commit seppuku by crashing. This does mean that if you fail the brainswap, your nodes will go offline.
 
-From the network point of view, an identity is online as long as it continues to sign messags on the network. By doing a brainswap on a block boundary, N<sub>A</sub> will sign messages for the identity at the  `< height`, and N<sub>B</sub> will sign all messages `> height`. From a network point of view, the identity is continously signing messages, and never goes offline. This does stregth the notion that an identity and node are not necessarily the same thing.
+From the network point of view, an identity is online as long as it continues to sign messags on the network. By doing a brainswap on a block boundary, N<sub>A</sub> will sign messages for the identity at the  `< height`, and N<sub>B</sub> will sign all messages `> height`. From a network point of view, the identity is continously signing messages, and never goes offline. This does strengthen the notion that an identity and node are not necessarily the same thing.
 
+
+### 2. Updating factomd docker container
+
+When updating the factomd docker container you will need to know the `docker run ...` command used to start the container. The default run command for mainnet can be found [here](README.md#from-the-docker-cli-recommended-and-better-tested).
+
+The simpliest way to update, is to stop factomd, remove the container, then choose the new image when using `docker run...`
+
+1. Stop factomd container : `docker stop factomd`
+2. Remove the container  : `docker rm factomd`
+3. Start the new, updated image : `docker run ..dockerflags.. factominc/factomd:v#.#.#-alpine ..factomdflags..` replacing `#.#.#` with the newest version.

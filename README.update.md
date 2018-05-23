@@ -1,11 +1,16 @@
 # Table of Contents
-
+   * [Table of Contents](#table-of-contents)
    * [Updating](#updating)
       * [Updating Factomd](#updating-factomd)
       * [Updating Processes](#updating-processes)
+         * [0. Checking Node Health](#0-checking-node-health)
+            * [1. Checking DBHeight](#1-checking-dbheight)
+            * [2. Check node is syncing minutes](#2-check-node-is-syncing-minutes)
+            * [3. Check process list for s](#3-check-process-list-for-s)
          * [1. Brain Swapping / Brain Transfering](#1-brain-swapping--brain-transfering)
             * [Process](#process)
             * [Technical Information](#technical-information)
+
 
 
 # Updating
@@ -29,6 +34,37 @@ These are the various processes that an operator needs to know before performing
 
 Each Process will have the process steps, as well as some additional info for additional understanding.
 
+
+### 0. Checking Node Health
+
+There are some simple checks you can do to determine your node's health. This will be from your node's perspective, so it is not a perfect check, but can be done before performing procedures to get a rough check if things are working.
+
+1. Check your node's height against the network's height [Details](#1-checking-dbheight)
+2. Check your node is syncing minutes : [Details](#2-check-node-is-syncing-minutes)
+3. Check the process list for <nil>, that indicates some network instability : [Details](#3-check-process-list-for-s)
+
+
+#### 1. Checking DBHeight
+
+Checking your node's height against the node of the network ensures your database is synced. To get the network height you will need another node, or you can use the explorer. But keep in mind the explorer is not "live" and can lag by a block or two.
+
+Use the `Your Block Height` on the control panel as an indicator of the height you are synced too.
+
+#### 2. Check node is syncing minutes
+
+Each block while it is being created is split into 10 minutes, and each minute your node uses as a syncing point.
+To check if your node is following minutes, go to the control panel -> `More Detailed Node Information` -> `Summary`.
+You will see something along the lines of:
+```
+===SummaryStart===
+   FNode04[f0b7e3] L___vm01  0/ 0  0.0%  0.000   165[e0b9f8] 163/166/167  7/ 7         0/0/0/0                43400/0/0/0      0     0     2/40/100           0/0/0   0.07/0.00 0/0 - 309415
+```
+The `7/7` means you are on minute 7. On a follower node it will appear as `_/7`. If this number is on `0` and stuck for over a minute, your node is not syncing minutes.
+
+#### 3. Check process list for <nil>s
+
+The Process list is located in the control panel (localhost:8090) -> `more detailed node information` -> `Process List`. Simply do a `ctrl+f` and search for `<nil>`. If any appear, your node might not be syncing well with the network.
+
 ### 1. Brain Swapping / Brain Transfering
 
 Brain swap/transfer is the simple idea of moving an identity from 1 node to another, such that the identity never appears to be offline from the perspective of the network. It is called a swap when both nodes switch with the other node's identity, and therefore 'swap' positions. It is a transfer when only 1 identity is involved.
@@ -42,8 +78,9 @@ Definitions:
 
 Prequsites:
 
-- 2 fully synced factomd nodes
+- 2 fully synced healthy factomd nodes
     - Will be calling them N<sub>A</sub> and N<sub>B</sub>
+    - Health checking can be seen [here](#0-checking-node-health)
 - An Identity in  N<sub>A</sub>
     - If doing a swap, make sure all N<sub>A</sub>->N<sub>B</sub> instructions are also done N<sub>B</sub>->N<sub>A</sub>
     - An Identity to move on N<sub>A</sub>
@@ -85,7 +122,7 @@ It is important to set this on both nodes, and N<sub>A</sub> needs to release it
 
 Once `ChangeAcksHeight` is set and the identity is moved, you can save and close the file
 
-3. The brian transfer was initiated. Now you must wait for the block height specified to arrive (~20-30min). To verify it has worked, go to the control panel of both nodes. Click `More Detailed Node Information` -> `Servers` -> `My Node`. The Identity ChainID shown should be your identity on N<sub>B</sub> and gibberish on N<sub>A</sub>.
+3. The brain transfer was initiated. Now you must wait for the block height specified to arrive (~20-30min). To verify it has worked, go to the control panel of both nodes. Click `More Detailed Node Information` -> `Servers` -> `My Node`. The Identity ChainID shown should be your identity on N<sub>B</sub> and gibberish on N<sub>A</sub>.
 
 4. At this point your identity is on N<sub>B</sub>, and you can do as you wish with N<sub>A</sub> (update, turn offline, decomission, etc).
 

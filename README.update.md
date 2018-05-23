@@ -6,11 +6,12 @@
          * [0. Checking Node Health](#0-checking-node-health)
             * [1. Checking DBHeight](#1-checking-dbheight)
             * [2. Check node is syncing minutes](#2-check-node-is-syncing-minutes)
-            * [3. Check process list for s](#3-check-process-list-for-s)
+            * [3. Check process list for \<nil\>s](#3-check-process-list-for-nils)
          * [1. Brain Swapping / Brain Transferring](#1-brain-swapping--brain-transferring)
             * [Process](#process)
             * [Technical Information](#technical-information)
          * [2. Updating factomd docker container](#2-updating-factomd-docker-container)
+
 
 
 
@@ -43,7 +44,7 @@ There are some simple checks you can do to determine your node's health. This wi
 
 1. Check your node's height against the network's height [Details](#1-checking-dbheight)
 2. Check your node is syncing minutes : [Details](#2-check-node-is-syncing-minutes)
-3. Check the process list for <nil>, that indicates some network instability : [Details](#3-check-process-list-for-s)
+3. Check the process list for \<nil\>, that indicates some network instability : [Details](#3-check-process-list-for-s)
 
 
 #### 1. Checking DBHeight
@@ -63,7 +64,7 @@ You will see something along the lines of:
 ```
 The `7/7` means you are on minute 7. On a follower node it will appear as `_/7`. If this number is on `0` and stuck for over a minute, your node is not syncing minutes.
 
-#### 3. Check process list for <nil>s
+#### 3. Check process list for \<nil\>s
 
 The Process list is located in the control panel (localhost:8090) -> `more detailed node information` -> `Process List`. Simply do a `ctrl+f` and search for `<nil>`. If any appear, your node might not be syncing well with the network.
 

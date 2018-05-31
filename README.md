@@ -18,7 +18,6 @@ Please follow the instructions [here](https://docs.docker.com/install/linux/dock
 
 Then, run `usermod -aG docker $USER` and logout/login.
 
-
 # Configure Docker
 
 In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over a self-signed TLS certificate. Due to the way iptables and docker work you cannot use the `INPUT` chain to block access to apps running in a docker container as it's not a local destination but a `FORWARD` destination. By default when you map a port into a docker container it opens up to `any` host. To restrict access we need to add our rules in the `DOCKER-USER` chain [reference](https://docs.docker.com/network/iptables/).
@@ -40,6 +39,13 @@ sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m t
 ```
 
 Don't forget to [save](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands#saving-rules) the rules!
+
+# Download Docker TLS Certificate
+
+Clone this git repository
+`git clone https://github.com/FactomProject/factomd-authority-toolkit`
+
+Certificate can be found within the tls directory and must be used in the next step when setting up the docker daemon. 
 
 # Exposing the Docker Engine
 

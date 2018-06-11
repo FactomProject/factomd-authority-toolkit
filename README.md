@@ -2,14 +2,12 @@
 
 This repository is responsible for maintaining the control plane for factomd M3.
 
-It includes 4 containers:
+It includes 3 containers:
   1. FactomD
   > Runs the factom node
   2. SSH
   > Permits ssh access only to _this specific container_. Mounts the factomd database volume for debugging purposes.
-  3. Filebeat
-  > Reports stdout/stderr of all docker containers to our elasticsearch instance
-  4. Metricbeat
+  3. Metricbeat
   > Reports hardware metrics of all docker containers to our elasticsearch instance.
 
 # Install docker

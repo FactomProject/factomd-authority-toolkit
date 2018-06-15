@@ -36,9 +36,23 @@ sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m t
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 2222 -j REJECT --reject-with icmp-port-unreachable
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 8088 -j REJECT --reject-with icmp-port-unreachable
 ```
-(Replace `<external if>` with the name of the interface you use to connect to the internet eg. eth0 or ens0)
+(Replace `<external if>` with the name of the interface you use to connect to the internet eg. eth0 or ens0. To see interfaces use `ip addr list`)
 
 Don't forget to [save](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands#saving-rules) the rules!
+
+# Store Docker Swarm certificate and key
+Make sure you store the Docker Swarm mainnet key and certificate on your system. The files can be found at [here](https://github.com/FactomProject/factomd-authority-toolkit/tree/master/tls)
+You can store these files in the directory /etc/docker for instance:
+```
+sudo mkdir -p /etc/docker
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert.pem -O /etc/docker/factom-mainnet-cert.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key.pem -O /etc/docker/factom-mainnet-key.pem
+sudo chmod 644 /etc/docker/factom-mainnet-cert.pem
+sudo chmod 440 /etc/docker/factom-mainnet-key.pem
+sudo chgrp docker /etc/docker/*.pem
+```
+
+Please note that in the rest of this file we assume you stored the files using the /etc/docker location and with above names. If not please adjust the commands below involving the certificate and keys.
 
 # Configure and Run the Docker Engine
 
@@ -64,8 +78,8 @@ Example configuration:
 ```
 {
   "tls": true,
-  "tlscert": "/path/to/cert.pem",
-  "tlskey": "/path/to/key.pem",
+  "tlscert": "/etc/docker/factom-mainnet-cert.pem",
+  "tlskey": "/etc/docker/factom-mainnet-key.pem",
   "hosts": ["tcp://0.0.0.0:2376", "unix:///var/run/docker.sock"]
 }
 ```
@@ -81,7 +95,7 @@ For the same options as described above, you would use the following command
 line options:
 
 ```
-dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=/path/to/cert.pem --tlskey=/path/to/key.pem
+dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem
 ```
 
 ## Choose one of the following 3 options for starting dockerd
@@ -91,7 +105,7 @@ same option in your `/etc/docker/daemon.json` file.
 
 Open (using `sudo`) `/etc/sysconfig/docker` in your favorite text editor.
 
-Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=<path to cert.pem> --tlskey=<path to key.pem>` to the pre-existing OPTIONS
+Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem` to the pre-existing OPTIONS
 
 Then, `sudo service docker restart`.
 
@@ -117,7 +131,7 @@ service file override.
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tls --tlscert <path to cert.pem> --tlskey <path to key.pem>
+ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tls --tlscert /etc/docker/factom-mainnet-cert.pem --tlskey /etc/docker/factom-mainnet-key.pem
 ```
 Then reload the configuration and the `docker.service`
 ```
@@ -130,7 +144,7 @@ sudo systemctl restart docker.service
 You can manually start the docker daemon via:
 
 ```
-sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=<path to cert.pem> --tlskey=<path to key.pem>
+sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem
 ```
 or just
 ```

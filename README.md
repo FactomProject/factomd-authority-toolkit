@@ -205,7 +205,7 @@ Once you have joined the network, you will be issued a control panel login by a 
 
 Please note: There is a version for the Factom software in the next command. Make sure you run the correct and latest announced version from the Discord #operators-announcement channel
 
-Run this command _exactly_: `docker run -d --name "factomd" -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.0.0-alpine -startdelay=600 -faulttimeout=120 -config=/root/.factom/private/factomd.conf
+Run this command _exactly_: `docker run -d --name "factomd" -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.1.1-alpine -startdelay=600 -faulttimeout=120 -config=/root/.factom/private/factomd.conf
 `
 After this your node will be started. You can check for the existence of a factom container using the command `docker ps`
 Please wait for your node to be fully synced by checking the control panel node sync statuses to be 100% before performing any next steps. Please also regard the initial wait period of 20 minutes before doing anything with your node.

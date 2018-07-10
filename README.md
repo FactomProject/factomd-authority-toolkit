@@ -208,6 +208,6 @@ Please note: There is a version for the Factom software in the next command. Mak
 Run this command _exactly_: `docker run -d --name "factomd" -v "factom_database:/root/.factom/m2" -v "factom_keys:/root/.factom/private" -p "8088:8088" -p "8090:8090" -p "8108:8108" -l "name=factomd" factominc/factomd:v5.2.0-alpine -startdelay=600 -faulttimeout=120 -config=/root/.factom/private/factomd.conf
 `
 After this your node will be started. You can check for the existence of a factom container using the command `docker ps`
-Please wait for your node to be fully synced by checking the control panel node sync statuses to be 100% before performing any next steps. Please also regard the initial wait period of 20 minutes before doing anything with your node.
+Please wait for your node to be fully synced by checking the control panel node sync statuses to be 100% before performing any next steps. Please also regard the initial wait period of 20 minutes before doing anything with your node.  Also note that the factomd:v5.X.X-alpine version may have changed since the time of writing.
 
 ### NOTE: The Swarm cluster is still experimental, so please pardon our dust! If you have an issues, please contact ian at factom dot com.

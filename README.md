@@ -21,12 +21,12 @@ Then, run `usermod -aG docker $USER` and make sure you do logout/login, as other
 
 In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over TLS using a self-signed TLS certificate. Due to the way iptables and docker work you cannot use the `INPUT` chain to block access to apps running in a docker container as it's not a local destination but a `FORWARD` destination. By default when you map a port into a docker container it opens up to `any` host. To restrict access we need to add our rules in the `DOCKER-USER` chain [reference](https://docs.docker.com/network/iptables/).
 
-- TCP port `2376` _only to_ `52.48.130.243` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts. As this is a local service we use the `INPUT` chain.
+- TCP port `2376` _only to_ `52.48.130.243 & 18.203.51.247` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts. As this is a local service we use the `INPUT` chain.
 
 In addition,  the following ports must be opened for factomd to function which we add to the `DOCKER-USER` chain:
-- `2222` to `52.48.130.243`, which is the SSH port used by the `ssh` container
-- `8088` to `52.48.130.243`, the factomd API port
-- `8090` to `52.48.130.243`, the factomd Control panel
+- `2222` to `52.48.130.243 & 18.203.51.247`, which is the SSH port used by the `ssh` container
+- `8088` to `52.48.130.243 & 18.203.51.247`, the factomd API port
+- `8090` to `52.48.130.243 & 18.203.51.247`, the factomd Control panel
 - `8108` to the world, the factomd mainnet port
 
 An example using `iptables`:
@@ -36,6 +36,8 @@ sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m t
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 2222 -j REJECT --reject-with icmp-port-unreachable
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 8088 -j REJECT --reject-with icmp-port-unreachable
 ```
+Repeat these instructions with the IP 18.203.51.247
+
 (Replace `<external if>` with the name of the interface you use to connect to the internet eg. eth0 or ens0. To see interfaces use `ip addr list`)
 
 Don't forget to [save](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands#saving-rules) the rules!

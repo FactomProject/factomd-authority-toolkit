@@ -1,14 +1,13 @@
 # Security Update
-The new Docker Swarm certificate and key is used for authenticating with the docker swarm.  This change will verify clients with the certificate, as well as encrypt communication with the Docker API using TLS. First, you can move the old cert and key - from their location - (if placed in the default location):
+The new Docker Swarm certificate and key is used for authenticating with the docker swarm.  This change will verify clients with the certificate, as well as encrypt communication with the Docker API using TLS. First, move the new keys to `/etc/docker` in order to use it for the docker api:
 
 ```
-sudo mv /etc/docker/factom-mainnet-cert.pem{,.bak}
-sudo mv /etc/docker/factomd-mainnet-key.pem{,.bak}
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert.pem -O /etc/docker/factom-mainnet-cert.pem
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key.pem -O /etc/docker/factom-mainnet-key.pem
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/ca.pem -O /etc/docker/factom-mainnet-ca.pem
-sudo chmod 644 /etc/docker/factom-mainnet-cert.pem
-sudo chmod 440 /etc/docker/factom-mainnet-key.pem /etc/docker/factom-mainnet-ca.pem
+
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert.pem -O /etc/docker/factom-ca-mainnet-cert.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key.pem -O /etc/docker/factom-ca-mainnet-key.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/ca.pem -O /etc/docker/factom-ca-mainnet-ca.pem
+sudo chmod 644 /etc/docker/factom-ca-mainnet-cert.pem
+sudo chmod 440 /etc/docker/factom-ca-mainnet-key.pem /etc/docker/factom-ca-mainnet-ca.pem
 sudo chgrp docker /etc/docker/*.pem
 
 ```
@@ -23,13 +22,13 @@ Example configuration:
 ```
 {
   "tlsverify": true,
-  "tlscert": "/etc/docker/factom-mainnet-cert.pem",
-  "tlskey": "/etc/docker/factom-mainnet-key.pem",
-  "tlscacert":"/etc/docker/factom-mainnet-ca.pem",
+  "tlscert": "/etc/docker/factom-ca-mainnet-cert.pem",
+  "tlskey": "/etc/docker/factom-ca-mainnet-key.pem",
+  "tlscacert":"/etc/docker/factom-ca-mainnet-ca.pem",
   "hosts": ["tcp://0.0.0.0:2376", "unix:///var/run/docker.sock"]
 }
 ```
- - *The line `tls` has been changed to `tlsverify`  and the `"tlscacert":"/etc/docker/factom-mainnet-ca.pem",` line has been added*
+ - *The line `tls` has been changed to `tlsverify`  and the `"tlscacert":"/etc/docker/factom-ca-mainnet-ca.pem",` line has been added*
 
 As noted above, please make sure that you do not also specify any of these
 options on the command line for `dockerd`. Please make sure to specify the
@@ -41,14 +40,14 @@ the `docker.service` you will need an additional host in your host list:
 
 For the same options as described above, you would use the following command line options:
 ```
-dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca.pem --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem
+dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-ca-mainnet-ca.pem --tlscert=/etc/docker/factom-ca-mainnet-cert.pem --tlskey=/etc/docker/factom-ca-mainnet-key.pem
 ```
 ## Choose one of the following 3 options for starting dockerd
 
 ### 1. On RedHat
 Open (using `sudo`) `/etc/sysconfig/docker` in your favorite text editor.
 
-Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca.pem --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem` to the pre-existing OPTIONS
+Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-ca-mainnet-ca.pem --tlscert=/etc/docker/factom-ca-mainnet-cert.pem --tlskey=/etc/docker/factom-ca-mainnet-key.pem` to the pre-existing OPTIONS
 
 Then, `sudo service docker restart`.
 
@@ -69,7 +68,7 @@ If you are *not* using `/etc/docker/daemon.json` use the following for your 
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tlsverify --tlscacert  /etc/docker/factom-mainnet-ca.pem --tlscert /etc/docker/factom-mainnet-cert.pem --tlskey /etc/docker/factom-mainnet-key.pem
+ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tlsverify --tlscacert  /etc/docker/factom-ca-mainnet-ca.pem --tlscert /etc/docker/factom-ca-mainnet-cert.pem --tlskey /etc/docker/factom-ca-mainnet-key.pem
 ```
 
 Then reload the configuration and the docker.service
@@ -84,7 +83,7 @@ sudo systemctl restart docker.service
 You can manually start the docker daemon via:
 
 ```
-sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca.pem --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem
+sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-ca-mainnet-ca.pem --tlscert=/etc/docker/factom-ca-mainnet-cert.pem --tlskey=/etc/docker/factom-ca-mainnet-key.pem
 ```
 or just
 ```

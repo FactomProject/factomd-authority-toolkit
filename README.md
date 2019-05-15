@@ -35,8 +35,13 @@ sudo iptables -A INPUT ! -s 52.48.130.243/32 -p tcp -m tcp --dport 2376 -m connt
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 8090 -j REJECT --reject-with icmp-port-unreachable
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 2222 -j REJECT --reject-with icmp-port-unreachable
 sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 8088 -j REJECT --reject-with icmp-port-unreachable
+
+
+sudo iptables -A INPUT ! -s 18.203.51.247/32 -p tcp -m tcp --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j REJECT --reject-with icmp-port-unreachable
+sudo iptables -A DOCKER-USER ! -s 18.203.51.247/32  -i <external if> -p tcp -m tcp --dport 8090 -j REJECT --reject-with icmp-port-unreachable
+sudo iptables -A DOCKER-USER ! -s 18.203.51.247/32  -i <external if> -p tcp -m tcp --dport 2222 -j REJECT --reject-with icmp-port-unreachable
+sudo iptables -A DOCKER-USER ! -s 18.203.51.247/32  -i <external if> -p tcp -m tcp --dport 8088 -j REJECT --reject-with icmp-port-unreachable
 ```
-Repeat these instructions with the IP 18.203.51.247
 
 (Replace `<external if>` with the name of the interface you use to connect to the internet eg. eth0 or ens0. To see interfaces use `ip addr list`)
 

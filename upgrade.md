@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 # Security Update
 The new Docker Swarm certificate and key is used for authenticating with the docker swarm.  This change will verify clients with the certificate, as well as encrypt communication with the Docker API using TLS. First, move the new keys to `/etc/docker` in order to use it for the docker api:
-=======
-# Update Instructions - TLS Certificate
-The new Docker Swarm certificate and key is used for authenticating with the docker swarm.  This change will verify clients with the certificate, as well as encrypt communication with the Docker API using TLS. First, you can move the old cert and key - from their location - (if placed in the default location):
->>>>>>> eb032ce7f3f9001ea8ae86a6d56afeda6e8fd66e
 
 ```
 

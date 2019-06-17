@@ -147,7 +147,7 @@ sudo systemctl restart docker.service
 You can manually start the docker daemon via:
 
 ```
-sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscacert=/etc/docker/factom-mainnet-ca_exp_5-14-21.pem --tlscert=/etc/docker/factom-mainnet-cert_exp_5-14-21.pem --tlskey=/etc/docker/factom-mainnet-key_exp_5-14-21.pem
+sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca_exp_5-14-21.pem --tlscert=/etc/docker/factom-mainnet-cert_exp_5-14-21.pem --tlskey=/etc/docker/factom-mainnet-key_exp_5-14-21.pem
 ```
 or just
 ```

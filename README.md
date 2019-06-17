@@ -21,22 +21,16 @@ Then, run `usermod -aG docker $USER` and make sure you do logout/login, as other
 
 In order to join the swarm, first ensure that your firewall rules allow access on the following ports. All swarm communications occur over TLS using a self-signed TLS certificate. Due to the way iptables and docker work you cannot use the `INPUT` chain to block access to apps running in a docker container as it's not a local destination but a `FORWARD` destination. By default when you map a port into a docker container it opens up to `any` host. To restrict access we need to add our rules in the `DOCKER-USER` chain [reference](https://docs.docker.com/network/iptables/).
 
-- TCP port `2376` _only to_ `52.48.130.243 & 18.203.51.247` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts. As this is a local service we use the `INPUT` chain.
+- TCP port `2376` _only to_ `18.203.51.247` for secure Docker engine communication. This port is required for Docker Machine to work. Docker Machine is used to orchestrate Docker hosts. As this is a local service we use the `INPUT` chain.
 
 In addition,  the following ports must be opened for factomd to function which we add to the `DOCKER-USER` chain:
-- `2222` to `52.48.130.243 & 18.203.51.247`, which is the SSH port used by the `ssh` container
-- `8088` to `52.48.130.243 & 18.203.51.247`, the factomd API port
-- `8090` to `52.48.130.243 & 18.203.51.247`, the factomd Control panel
-- `8108` to the world, the factomd mainnet port
+- `2222` to `18.203.51.247`, which is the SSH port used by the `ssh` container
+- `8088` to `18.203.51.247`, the factomd API port
+- `8090` to `18.203.51.247`, the factomd Control panel
+- `8108` to the world, the factomd mainnet p2p port
 
 An example using `iptables`:
 ```
-sudo iptables -A INPUT ! -s 52.48.130.243/32 -p tcp -m tcp --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j REJECT --reject-with icmp-port-unreachable
-sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 8090 -j REJECT --reject-with icmp-port-unreachable
-sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 2222 -j REJECT --reject-with icmp-port-unreachable
-sudo iptables -A DOCKER-USER ! -s 52.48.130.243/32  -i <external if> -p tcp -m tcp --dport 8088 -j REJECT --reject-with icmp-port-unreachable
-
-
 sudo iptables -A INPUT ! -s 18.203.51.247/32 -p tcp -m tcp --dport 2376 -m conntrack --ctstate NEW,ESTABLISHED -j REJECT --reject-with icmp-port-unreachable
 sudo iptables -A DOCKER-USER ! -s 18.203.51.247/32  -i <external if> -p tcp -m tcp --dport 8090 -j REJECT --reject-with icmp-port-unreachable
 sudo iptables -A DOCKER-USER ! -s 18.203.51.247/32  -i <external if> -p tcp -m tcp --dport 2222 -j REJECT --reject-with icmp-port-unreachable
@@ -52,10 +46,11 @@ Make sure you store the Docker Swarm mainnet key and certificate on your system.
 You can store these files in the directory /etc/docker for instance:
 ```
 sudo mkdir -p /etc/docker
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert_exp_5-14-21.pem -O /etc/docker/factom-mainnet-cert.pem
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key_exp_5-14-21.pem -O /etc/docker/factom-mainnet-key.pem
-sudo chmod 644 /etc/docker/factom-mainnet-cert.pem
-sudo chmod 440 /etc/docker/factom-mainnet-key.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert_exp_5-14-21.pem -O /etc/docker/factom-mainnet-cert_exp_5-14-21.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key_exp_5-14-21.pem -O /etc/docker/factom-mainnet-key_exp_5-14-21.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/ca_exp_5-14-21.pem -O /etc/docker/factom-mainnet-ca_exp_5-14-21.pem
+sudo chmod 644 /etc/docker/factom-mainnet-cert_exp_5-14-21.pem
+sudo chmod 440 /etc/docker/factom-mainnet-key_exp_5-14-21.pem /etc/docker/factom-mainnet-ca_exp_5-14-21.pem
 sudo chgrp docker /etc/docker/*.pem
 ```
 
@@ -84,15 +79,16 @@ You can configure the docker daemon using a default config file, located at
 Example configuration:
 ```
 {
-  "tls": true,
-  "tlscert": "/etc/docker/factom-mainnet-cert.pem",
-  "tlskey": "/etc/docker/factom-mainnet-key.pem",
+  "tlsverify": true,
+  "tlscert": "/etc/docker/factom-mainnet-cert_exp_5-14-21.pem",
+  "tlskey": "/etc/docker/factom-mainnet-key_exp_5-14-21.pem",
+  "tlscacert":"/etc/docker/factom-mainnet-ca_exp_5-14-21.pem",
   "hosts": ["tcp://0.0.0.0:2376", "unix:///var/run/docker.sock"]
 }
 ```
 As noted above, please make sure that you do not also specify any of these
 options on the command line for `dockerd`. Please make sure to specify the
-correct paths for `"tlscert"` and `"tlskey"`. If you are using `systemd` to run
+correct paths for `"tlscert"`, `"tlskey"`, and `"tlscacert"`. If you are using `systemd` to run
 the `docker.service` you will need an additional host in your host list:
 `"fd://"`. See `systemd` below.
 
@@ -102,7 +98,7 @@ For the same options as described above, you would use the following command
 line options:
 
 ```
-dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem
+dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca_exp_5-14-21.pem --tlscert=/etc/docker/factom-mainnet-cert_exp_5-14-21.pem --tlskey=/etc/docker/factom-mainnet-key_exp_5-14-21.pem
 ```
 
 ## Choose one of the following 3 options for starting dockerd
@@ -112,7 +108,7 @@ same option in your `/etc/docker/daemon.json` file.
 
 Open (using `sudo`) `/etc/sysconfig/docker` in your favorite text editor.
 
-Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tls --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem` to the pre-existing OPTIONS
+Append `-H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca_exp_5-14-21.pem --tlscert=/etc/docker/factom-mainnet-cert_exp_5-14-21.pem --tlskey=/etc/docker/factom-mainnet-key_exp_5-14-21.pem` to the pre-existing OPTIONS
 
 Then, `sudo service docker restart`.
 
@@ -138,7 +134,7 @@ service file override.
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tls --tlscert /etc/docker/factom-mainnet-cert.pem --tlskey /etc/docker/factom-mainnet-key.pem
+ExecStart=/usr/bin/dockerd -H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/factom-mainnet-ca_exp_5-14-21.pem --tlscert=/etc/docker/factom-mainnet-cert_exp_5-14-21.pem --tlskey=/etc/docker/factom-mainnet-key_exp_5-14-21.pem
 ```
 Then reload the configuration and the `docker.service`
 ```
@@ -151,7 +147,7 @@ sudo systemctl restart docker.service
 You can manually start the docker daemon via:
 
 ```
-sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscert=/etc/docker/factom-mainnet-cert.pem --tlskey=/etc/docker/factom-mainnet-key.pem
+sudo dockerd -H=unix:///var/run/docker.sock -H=0.0.0.0:2376 --tlscacert=/etc/docker/factom-mainnet-ca_exp_5-14-21.pem --tlscert=/etc/docker/factom-mainnet-cert_exp_5-14-21.pem --tlskey=/etc/docker/factom-mainnet-key_exp_5-14-21.pem
 ```
 or just
 ```

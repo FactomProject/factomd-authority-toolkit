@@ -52,8 +52,8 @@ Make sure you store the Docker Swarm mainnet key and certificate on your system.
 You can store these files in the directory /etc/docker for instance:
 ```
 sudo mkdir -p /etc/docker
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert.pem -O /etc/docker/factom-mainnet-cert.pem
-sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key.pem -O /etc/docker/factom-mainnet-key.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/cert_exp_5-14-21.pem -O /etc/docker/factom-mainnet-cert.pem
+sudo wget https://raw.githubusercontent.com/FactomProject/factomd-authority-toolkit/master/tls/key_exp_5-14-21.pem -O /etc/docker/factom-mainnet-key.pem
 sudo chmod 644 /etc/docker/factom-mainnet-cert.pem
 sudo chmod 440 /etc/docker/factom-mainnet-key.pem
 sudo chgrp docker /etc/docker/*.pem

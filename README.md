@@ -53,6 +53,7 @@ sudo chmod 644 /etc/docker/factom-mainnet-cert_exp_5-14-21.pem
 sudo chmod 440 /etc/docker/factom-mainnet-key_exp_5-14-21.pem /etc/docker/factom-mainnet-ca_exp_5-14-21.pem
 sudo chgrp docker /etc/docker/*.pem
 ```
+The last command `sudo chgrp docker /etc/docker/*.pem` might fail if docker service is run as root. This is not a probem, as root should be able to run them anyway.
 
 Please note that in the rest of this file we assume you stored the files using the /etc/docker location and with above names. If not please adjust the commands below involving the certificate and keys.
 
